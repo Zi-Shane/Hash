@@ -10,8 +10,9 @@
 #include <fstream>
 
 using namespace std;
+int probing_times_total = 0;
 
-// determine table size
+// determine table size (prime number)
 int table_size(int items_num) {
     int size;    // table size
     items_num *= 2;
@@ -30,6 +31,15 @@ int table_size(int items_num) {
     }
     return size = --i;
 }
+// customer table size
+int customer_size() {
+    int size;
+    cout << "Table size : ";
+    cin >> size;
+    return size;
+}
+
+
 // probing func
 int probing_q(int i) {
     int probing = i * i;
@@ -47,20 +57,26 @@ int hash_function(int origin, int size, int *table, int probing_times = 0) {
     while (probing_times < 100) {
         hashed = (origin + probing_q(probing_times)) % size;
         
-        if (isCollision(table, hashed))
+        if (isCollision(table, hashed)) {
             probing_times++;
-        else
-           // *probing_total += probing_times;
+        } else {
+            probing_times_total += probing_times;
             return hashed;
+        }
     }
     return -1;    //probing failed
 }
 // print hashed table
-void print_table(int *table, int size) {
-    for (int i = 0; i < size; i++) {
-        cout << "Table[" << i << "]\t" << table[i] << endl;
+void print_table(int *table,int table_size) {
+    for (int i = 0; i < table_size; i++) {
+        if (table[i] == 0) {
+            cout << "Table[" << i << "]\t" << "-" << endl;
+        } else {
+            cout << "Table[" << i << "]\t" << table[i] << endl;
+        }
     }
 }
+
 
 int main(void) {
     string file_name;
@@ -83,13 +99,20 @@ int main(void) {
     }
     file.close();
 
-    int size = table_size(count_items);
+    // auto choose size
+    //     int size = table_size(count_items);
+    
+    // custom choose size
+    int size = customer_size();
+    if (size < count_items) {
+        cout << "Please choose a bigger size" << endl;
+        return EXIT_FAILURE;
+    }
+    
     int hash_Table[size];    // create a hash table
     for (int i = 0; i < size; i++) {
         hash_Table[i] = 0;
     }
-    
-//    int *probing_times_total = 0;
     
     for (int i = 0; i < count_items; i++) {
         int hashed_index = hash_function(file_items[i], size, hash_Table);
@@ -103,7 +126,7 @@ int main(void) {
     
     
     
-  //  cout << "\nTotal probing times = " << probing_times_total << endl;
+    cout << "\nTotal probing times = " << probing_times_total << endl;
     
 
 //      Debug
