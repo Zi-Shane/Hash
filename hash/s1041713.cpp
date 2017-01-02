@@ -1,13 +1,8 @@
-//
-//  main.cpp
-//  hash
-//
-//  Created by ZiShane on 2016/12/31.
-//  Copyright © 2016年 ZiShane. All rights reserved.
-//
-
 #include <iostream>
 #include <fstream>
+#include <string>
+
+#define buff 100
 
 using namespace std;
 int probing_times_total = 0;
@@ -81,7 +76,7 @@ void print_table(int *table,int table_size) {
 
 int main(void) {
     string file_name;
-    int file_items[100];  // temp array to store the numbers, readed from input file
+    int file_items[buff];  // temp array to store the numbers, readed from input file
     int count_items = 0;      // count how many integer in the file
     
     cout << "This is a hash program" << endl;
@@ -126,8 +121,10 @@ int main(void) {
         } else continue;
     }
     
-    int hash_Table[size];    // create a hash table
-    for (int i = 0; i < size; i++) {
+    int *hash_Table;    // create a hash table
+	hash_Table = new int[size];
+	
+	for (int i = 0; i < size; i++) {
         hash_Table[i] = 0;
     }
     
@@ -142,35 +139,7 @@ int main(void) {
     print_table(hash_Table, size);
     
     cout << "\nTotal probing times = " << probing_times_total << endl;
-    
-
-//      Debug
-
-//    // check how many items in hashed table & table size
-//    cout << "\n";
-//    int j = 0;
-//    for (int i = 0; i < size; i++) {
-//        cout << hash_Table[i] << ",";
-//        if (hash_Table[i] != 0) {
-//            j++;
-//        }
-//    }
-//    cout << "\n" << j << "," << size;
-    
-//    // push into hash table
-//    int hash_Table[table_size(count_items)];
-//    for (int i = 0; i < count_items; i++) {
-//        hash_Table[i] = file_items[i];
-//    }
-    
-    
-//    // check table size
-//    cout << sizeof(hash_Table) / sizeof(*hash_Table);
-    
-//    // print read file
-//    for (int i = 0; i < count_items; i++) {
-//        cout << hash_Table[i] << endl;
-//    }
-    
+   
+	system("pause");
     return EXIT_SUCCESS;
 }
