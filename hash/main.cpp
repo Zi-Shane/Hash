@@ -36,6 +36,7 @@ int customer_size() {
     int size;
     cout << "Table size : ";
     cin >> size;
+    cout << endl;
     return size;
 }
 
@@ -83,6 +84,7 @@ int main(void) {
     int file_items[100];  // temp array to store the numbers, readed from input file
     int count_items = 0;      // count how many integer in the file
     
+    cout << "This is a hash program" << endl;
     cout << "file name: ";
     cin >> file_name;
     
@@ -90,7 +92,7 @@ int main(void) {
     ifstream file ( file_name , ifstream::in );
     // file open failed
     if (!file) {
-        cout << "An error occured when opening file!";
+        cout << "An error occured when opening file!" << endl;
         return EXIT_FAILURE;
     }
     // file open successed
@@ -99,14 +101,29 @@ int main(void) {
     }
     file.close();
 
-    // auto choose size
-    //     int size = table_size(count_items);
-    
-    // custom choose size
-    int size = customer_size();
-    if (size < count_items) {
-        cout << "Please choose a bigger size" << endl;
-        return EXIT_FAILURE;
+    int size;
+    while (true) {
+        int chose_func;
+        cout << "----------------------------------" << endl;
+        cout << "1. Automatically choose table size" << endl;
+        cout << "2. Customer table size" << endl;
+        cout << "Choose table size: ";
+        cin >> chose_func;
+        cout << "----------------------------------" << endl;
+        
+        if (chose_func == 1) {
+                // auto choose size
+                size = table_size(count_items);
+                break;
+        } else if (chose_func == 2) {
+                // custom choose size
+                size = customer_size();
+                if (size < count_items) {
+                    cout << "Please choose a bigger size" << endl;
+                    return EXIT_FAILURE;
+                }
+                break;
+        } else continue;
     }
     
     int hash_Table[size];    // create a hash table
@@ -123,8 +140,6 @@ int main(void) {
     }
     
     print_table(hash_Table, size);
-    
-    
     
     cout << "\nTotal probing times = " << probing_times_total << endl;
     
